@@ -3,13 +3,24 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { useTheme, ThemeContext } from './hooks/useTheme'; // Import useTheme and ThemeContext
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const AppWithTheme: React.FC = () => {
+  const themeHook = useTheme();
+  return (
+    <ThemeContext.Provider value={themeHook}>
+      <App />
+    </ThemeContext.Provider>
+  );
+};
+
 root.render(
   <React.StrictMode>
-    <App />
+    <AppWithTheme />
   </React.StrictMode>
 );
 

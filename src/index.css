@@ -1,13 +1,36 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer base {
+  :root {
+    /* Professional Dark Theme */
+    --color-dark-background: #111214;
+    --color-dark-text: #F0F0F0;
+    --color-dark-accent: #00F5A0;
+
+    /* Playful Light Theme */
+    --color-light-background: #F8F9FA;
+    --color-light-text: #212529;
+    --color-light-accent: #10B981;
+
+    /* Default to Dark Theme */
+    --color-background: var(--color-dark-background);
+    --color-text: var(--color-dark-text);
+    --color-accent: var(--color-dark-accent);
+
+    font-family: 'Inter', sans-serif; /* Default font */
+  }
+
+  .theme-light {
+    --color-background: var(--color-light-background);
+    --color-text: var(--color-light-text);
+    --color-accent: var(--color-light-accent);
+    font-family: 'Lexend', sans-serif; /* Light theme font */
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
 }
