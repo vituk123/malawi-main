@@ -40,6 +40,7 @@ const SignUpPage: React.FC = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              autoComplete="username"
             />
           </div>
           <div className="mb-4">
@@ -50,6 +51,7 @@ const SignUpPage: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
             />
           </div>
           <div className="mb-4">
@@ -60,6 +62,7 @@ const SignUpPage: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="new-password"
             />
           </div>
           <div className="mb-6">

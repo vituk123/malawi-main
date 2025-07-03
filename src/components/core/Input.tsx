@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   type?: string;
   hasError?: boolean;
+  autoComplete?: string;
 }
 
 const Input: React.FC<InputProps> = ({ label, id, type = 'text', hasError = false, className, ...props }) => {

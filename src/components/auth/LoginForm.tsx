@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import api from '../../services/api';
+import api, { signIn } from '../../services/api';
 import useAuthStore from '../../store/authStore';
 import Input from '../core/Input';
 import Button from '../core/Button';
@@ -11,7 +11,7 @@ const LoginForm: React.FC = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = await api.post('/api/auth/signin', data);
+      const response = await signIn(data.username, data.password);
       setAuth(response.data.accessToken, response.data.refreshToken, response.data.id, response.data.username, response.data.email, response.data.roles);
       // Optionally redirect or show success message
       alert('Login successful!');
