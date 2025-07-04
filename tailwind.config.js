@@ -5,18 +5,16 @@ module.exports = {
   ],
   theme: {
     extend: {
+      // Professional and lighter color palette for a job portal
       colors: {
-        'dark-background': 'var(--color-dark-background)',
-        'dark-text': 'var(--color-dark-text)',
-        'dark-accent': 'var(--color-dark-accent)',
-        'light-background': 'var(--color-light-background)',
-        'light-text': 'var(--color-light-text)',
-        'light-accent': 'var(--color-light-accent)',
+        primary: {
+          500: '#4A90E2', // A professional blue
+        },
+        accent: {
+          500: '#F5A623', // An inviting orange/yellow
+        },
       },
-      fontFamily: {
-        inter: ['Inter', 'sans-serif'],
-        lexend: ['Lexend', 'sans-serif'],
-      },
+      fontFamily: {'sans': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', "Noto Sans", 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],},
     },
   },
   plugins: [],

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/core/Input';
 import Button from '../../components/core/Button';
-import { signUp } from '../../services/api'; // Assuming you'll add this function
+import { signUp } from '../../services/api';
 
 const SignUpPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -28,8 +28,8 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="bg-card p-8 rounded-lg shadow-md w-full max-w-md border border-border">
         <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -67,17 +67,17 @@ const SignUpPage: React.FC = () => {
           </div>
           <div className="mb-6">
             <label htmlFor="role" className="block text-gray-700 text-sm font-bold mb-2">
-              Role
+ Role
             </label>
             <select
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+ className="shadow appearance-none border border-input rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
             >
-              <option value="job_seeker">Job Seeker</option>
-              <option value="employer">Employer</option>
-              <option value="admin">Admin</option>
+ <option value="job_seeker">Job Seeker</option>
+ <option value="employer">Employer</option>
+ <option value="admin">Admin</option>
             </select>
           </div>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -87,7 +87,7 @@ const SignUpPage: React.FC = () => {
           </Button>
         </form>
         <p className="text-center text-sm mt-4">
-          Already have an account?{' '}
+ Already have an account?{' '}
           <a href="/signin" className="text-blue-600 hover:underline">
             Sign In
           </a>

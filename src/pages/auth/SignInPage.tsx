@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/core/Input';
 import Button from '../../components/core/Button';
-import { signIn } from '../../services/api'; // Assuming you'll add this function
+import { signIn } from '../../services/api';
 
 const SignInPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -15,8 +15,7 @@ const SignInPage: React.FC = () => {
     setError('');
     try {
       const response = await signIn(username, password);
-      console.log('Sign-in successful:', response);
-      // Handle successful login, e.g., store token, redirect
+      // Assuming signIn updates the authStore internally
       navigate('/'); // Redirect to home page or dashboard
     } catch (err: any) {
       setError(err.response?.data?.message || 'Sign-in failed');
@@ -24,8 +23,8 @@ const SignInPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="bg-card p-8 rounded-lg shadow-md w-full max-w-md border border-border">
         <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -55,7 +54,7 @@ const SignInPage: React.FC = () => {
         </form>
         <p className="text-center text-sm mt-4">
           Don't have an account?{' '}
-          <a href="/signup" className="text-blue-600 hover:underline">
+          <a href="/signup" className="text-primary hover:underline">
             Sign Up
           </a>
         </p>

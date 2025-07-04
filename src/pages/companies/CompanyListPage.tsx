@@ -13,6 +13,8 @@ interface Company {
   address: string;
   website: string;
   verified: boolean;
+  // Assuming the API will return pagination info
+  totalItems?: number;
 }
 
 const CompanyListPage: React.FC = () => {
@@ -22,25 +24,35 @@ const CompanyListPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const { roles } = useAuthStore();
-  const isAdmin = roles.includes('ROLE_ADMIN');
+  const [currentPage, setCurrentPage] = useState(0); // 0-indexed page
+  const [itemsPerPage] = useState(10); // You can make this dynamic
+  const [totalPages, setTotalPages] = useState(0);
+
+  const { roles, token } = useAuthStore();
+  const isAdmin = roles?.includes('ROLE_ADMIN');
 
   const fetchCompanies = useCallback(async () => {
     setLoading(true);
     setError('');
+    setMessage('');
     try {
-      const data = await searchCompanies(searchName, searchIndustry);
-      setCompanies(data);
+      // Using searchCompanies with empty parameters to get all companies
+      const response = await searchCompanies(searchName, searchIndustry, currentPage, itemsPerPage);
+      setCompanies(response.content); // Assuming the API returns content in a 'content' field
+      setTotalPages(response.totalPages); // Assuming the API returns total pages
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to fetch companies');
-    } finally {
+    }
+   finally {
       setLoading(false);
     }
-  }, [searchName, searchIndustry]);
+
+  }, [searchName, searchIndustry, currentPage, itemsPerPage]);
 
   useEffect(() => {
     fetchCompanies();
-  }, [fetchCompanies]); // Initial fetch on component mount
+
+  }, [fetchCompanies, currentPage]); // Add currentPage to dependencies
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,11 +69,19 @@ const CompanyListPage: React.FC = () => {
     }
   };
 
-  return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold text-center mb-8">Companies</h2>
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+  const renderPagination = () => {
+    // Basic pagination controls
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">Explore Companies</h2>
+
+      <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
         <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <Input
             id="searchName"
@@ -74,8 +94,9 @@ const CompanyListPage: React.FC = () => {
             id="searchIndustry"
             label="Search by Industry"
             type="text"
+            placeholder="e.g., Technology, Finance"
             value={searchIndustry}
-            onChange={(e) => setSearchIndustry(e.target.value)}
+ onChange={(e) => setSearchIndustry(e.target.value)}
           />
           <Button type="submit" className="w-full md:w-auto">
             Search
@@ -83,35 +104,62 @@ const CompanyListPage: React.FC = () => {
         </form>
       </div>
 
-      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-      {message && <p className="text-green-600 text-center mb-4">{message}</p>}
-      {loading && <p className="text-center">Loading companies...</p>}
+      {error && <p className="text-red-600 text-center mb-6">{error}</p>}
+      {message && <p className="text-green-600 text-center mb-6">{message}</p>}
+      {loading && (
+        <div className="flex justify-center items-center">
+          <p className="text-center text-gray-600">Loading companies...</p> {/* You can replace this with a spinner */}
+        </div>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {companies.map((company) => (
-          <div key={company.id} className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">{company.name}</h3>
-            <p className="text-gray-600 mb-1">Industry: {company.industry}</p>
-            <p className="text-gray-600 mb-1">{company.description}</p>
-            <p className="text-gray-600 mb-1">Address: {company.address}</p>
-            <p className="text-gray-600 mb-4">Website: <a href={company.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{company.website}</a></p>
-            <p className={`font-semibold ${company.verified ? 'text-green-600' : 'text-red-600'}`}>
-              Status: {company.verified ? 'Verified' : 'Unverified'}
-            </p>
-            <div className="mt-4 flex space-x-2">
-              <Link to={`/companies/edit/${company.id}`}>
-                <Button>Edit</Button>
+      {!loading && companies.length === 0 && (
+        <p className="text-center text-gray-600 text-lg">No companies found matching your criteria.</p>
+      )}
+
+      {!loading && companies.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {companies.map((company) => (
+            <div key={company.id} className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-200 ease-in-out">
+              <Link to={`/companies/${company.id}`} className="block">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">{company.name}</h3>
+                <p className="text-gray-600 text-sm mb-1">Industry: {company.industry}</p>
+                {/* <p className="text-gray-600 text-sm mb-1">{company.description}</p> // Description might be too long for card */}
+                <p className="text-gray-600 text-sm mb-1">Location: {company.address || 'N/A'}</p>
+                <p className="text-blue-600 text-sm hover:underline mb-4">Website: {company.website || 'N/A'}</p>
+                <p className={`font-semibold text-sm ${company.verified ? 'text-green-600' : 'text-red-600'}`}>
+                  Status: {company.verified ? 'Verified' : 'Unverified'}
+                </p>
               </Link>
-              {isAdmin && !company.verified && (
-                <Button onClick={() => handleVerify(company.id)} variant="secondary">
-                  Verify
-                </Button>
-              )}
+              <div className="mt-4 flex space-x-3">
+                {/* Assuming edit requires a different page/form */}
+                {/* <Link to={`/companies/edit/${company.id}`}>
+                  <Button size="sm">Edit</Button>
+                </Link> */}
+                {isAdmin && !company.verified && (
+                  <Button onClick={() => handleVerify(company.id)} variant="secondary" size="sm">
+                    Verify
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <div className="text-center mt-8">
+          ))}
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center space-x-4 mt-8">
+          <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+            Previous
+          </Button>
+          <span className="text-lg font-semibold">Page {currentPage + 1} of {totalPages}</span>
+          <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+            Next
+          </Button>
+        </div>
+      )}
+
+      <div className="text-center mt-10">
         <Link to="/companies/register">
           <Button>Register New Company</Button>
         </Link>

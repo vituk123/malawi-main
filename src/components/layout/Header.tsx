@@ -21,7 +21,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center">
+    <header className="bg-black text-white p-4 flex justify-between items-center">
       <h1 className="text-xl font-bold text-gray-900 dark:text-white">
         <Link to="/">Job Portal</Link>
       </h1>
@@ -29,34 +29,34 @@ const Header: React.FC = () => {
         <ul className="flex space-x-4 items-center">
           <li>
             <Link to="/jobs" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-              Jobs
+ Jobs
             </Link>
           </li>
           <li>
             <Link to="/companies" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-              Companies
+ Companies
             </Link>
           </li>
           {isLoggedIn ? (
             <>
               {roles.includes('ROLE_JOB_SEEKER') && (
                 <li>
-                  <Link to="/my-applications" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                    My Applications
+                  <Link to="/my-applications" className="text-gray-300 hover:text-blue-400">
+ My Applications
                   </Link>
                 </li>
               )}
               {(roles.includes('ROLE_EMPLOYER') || roles.includes('ROLE_ADMIN')) && (
                 <li>
-                  <Link to="/jobs/create" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                    Create Job
+                  <Link to="/jobs/create" className="text-gray-300 hover:text-blue-400">
+ Create Job
                   </Link>
                 </li>
               )}
               {(roles.includes('ROLE_EMPLOYER') || roles.includes('ROLE_ADMIN')) && (
                 <li>
-                  <Link to="/companies/register" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                    Register Company
+                  <Link to="/companies/register" className="text-gray-300 hover:text-blue-400">
+ Register Company
                   </Link>
                 </li>
               )}

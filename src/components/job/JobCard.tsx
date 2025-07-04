@@ -1,5 +1,6 @@
 import React from 'react';
 import StatusBadge from './StatusBadge';
+import { Link } from 'react-router-dom';
 
 interface JobCardProps {
   job: {
@@ -17,8 +18,10 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job, children }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-4 transition-transform transform hover:scale-105">
-      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{job.title}</h3>
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 sm:p-6 mb-4 hover:shadow-md transition duration-200 ease-in-out">
+      <Link to={`/jobs/${job.id}`}>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2 hover:underline cursor-pointer">{job.title}</h3>
+      </Link>
       <p className="text-gray-700 dark:text-gray-300 mb-1">{job.companyName} - {job.location}</p>
       <p className="text-gray-700 dark:text-gray-300 mb-1">Salary: ${job.salary.toLocaleString()}</p>
       <p className="text-gray-700 dark:text-gray-300 mb-1">Type: {job.jobType}</p>
